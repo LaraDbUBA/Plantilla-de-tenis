@@ -1,0 +1,144 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  margin: 0;
+}
+
+/* CONTENEDOR */
+.app {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* TITULO */
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* FORM */
+form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* BOTONES */
+.botones {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+.botones button:first-child {
+  background-color: #1976d2;
+  color: white;
+}
+
+.botones button:last-child {
+  background-color: #388e3c;
+  color: white;
+}
+
+/* DESCARGAR */
+.descargar {
+  width: 100%;
+  margin-top: 15px;
+  background-color: black;
+  color: white;
+}
+
+/* CARDS */
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin-top: 10px;
+}
+
+/* INFO */
+#info p {
+  margin: 5px 0;
+}
+
+/* GRILLA */
+.grid {
+  display: grid;
+  grid-template-columns: 80px repeat(24, 30px) 60px;
+  gap: 2px;
+  margin-top: 10px;
+}
+
+.cell {
+  border: 1px solid #ccc;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+/* ENCABEZADOS */
+.header {
+  background-color: #1976d2;
+  color: white;
+}
+
+/* EQUIPOS */
+.team1 { background-color: #e3f2fd; }
+.team2 { background-color: #e8f5e9; }
+
+/* RESUMEN */
+.resumen-grid {
+  display: grid;
+  grid-template-columns: 120px repeat(3, 60px) 80px;
+  gap: 2px;
+}
+
+.resumen-cell {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.resumen-header {
+  background-color: #444;
+  color: white;
+}
+
+/* ESTADOS */
+.sacando {
+  background-color: #ffd54f !important;
+  font-weight: bold;
+}
+
+.recibiendo {
+  background-color: #eeeeee !important;
+}
+
+.ganador {
+  background-color: #81c784 !important;
+  font-weight: bold;
+}

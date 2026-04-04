@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Planilla Tenis</title>
+
+  <!-- LINK AL CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="app">
+    <h1>🎾 Planilla de Tenis</h1>
+
+    <div id="exportar">
+
+      <form id="formDatos">
+        <input type="text" placeholder="Equipo 1" id="equipo1">
+        <input type="text" placeholder="Equipo 2" id="equipo2">
+        <input type="text" placeholder="Torneo" id="torneo">
+        <input type="text" placeholder="Categoría" id="categoria">
+      </form>
+
+
+
+      <div id="info" class="card"></div>
+      <div class="botones">
+        <button onclick="sumarPunto(0)">+ Punto Equipo 1</button>
+        <button onclick="sumarPunto(1)">+ Punto Equipo 2</button>
+      </div>
+
+      <h3>Resumen por Sets</h3>
+      <div id="resumen" class="card"></div>
+
+      <div id="grilla" class="card"></div>
+
+    </div>
+
+    <button class="descargar" onclick="descargarImagen()">📥 Descargar</button>
+  </div>
+
+  <!-- LIBRERÍA PRIMERO -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "TU_PROJECT.firebaseapp.com",
+    projectId: "TU_PROJECT_ID",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // 👇 hacemos global para usar en app.js
+  window.db = db;
+  window.doc = doc;
+  window.setDoc = setDoc;
+  window.onSnapshot = onSnapshot;
+  </script>
+
+
+  <!-- TU JS DESPUÉS -->
+  <script type= "module" src="app.js"></script>
+
+</body>
+</html>
