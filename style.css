@@ -25,17 +25,31 @@ form {
   margin-bottom: 15px;
 }
 
+.seccion{
+  margin-top: 20px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
 form input {
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
 }
+#resumen{
+  flex : 50%;
+}
 
 /* BOTONES */
 .botones {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   justify-content: space-between;
-  margin-bottom: 15px;
+  row-gap: 30px;
+  column-gap: 100px;
+  margin-top: 15px;
 }
 
 button {
@@ -51,12 +65,12 @@ button:hover {
   transform: scale(1.05);
 }
 
-.botones button:first-child {
+.uno {
   background-color: #1976d2;
   color: white;
 }
 
-.botones button:last-child {
+.dos {
   background-color: #388e3c;
   color: white;
 }
@@ -76,6 +90,7 @@ button:hover {
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   margin-top: 10px;
+  width: auto;
 }
 
 /* INFO */

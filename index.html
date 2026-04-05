@@ -24,19 +24,25 @@
 
 
       <div id="info" class="card"></div>
-      <div class="botones">
-        <button onclick="sumarPunto(0)">+ Punto Equipo 1</button>
-        <button onclick="sumarPunto(1)">+ Punto Equipo 2</button>
-      </div>
-
       <h3>Resumen por Sets</h3>
-      <div id="resumen" class="card"></div>
-
+      <div class="seccion">
+        <div class="mini seccion"></div>
+  
+        <div id="resumen" class="card"></div>
+        <div class="botones">
+        <button class="uno" onclick="sumarPunto(0)">+ Punto Equipo 1</button>
+        <button class="dos" onclick="sumarPunto(1)">+ Punto Equipo 2</button>
+        <button class="uno"onclick="restarPunto(0)">Deshacer punto</button>
+        <button class="dos" onclick="restarPunto(1)">Deshacer punto</button>
+        </div>
+      </div>
+      
       <div id="grilla" class="card"></div>
 
     </div>
 
     <button class="descargar" onclick="descargarImagen()">📥 Descargar</button>
+    <button onclick="nuevoPartido()">➕ Nuevo Partido</button>
   </div>
 
   <!-- LIBRERÍA PRIMERO -->

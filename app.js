@@ -25,6 +25,17 @@ const db = getFirestore(app);
 const analytics = getAnalytics(app);
 let idPartido = new URLSearchParams(window.location.search).get("id");
 
+function generarId() {
+  return Date.now().toString();
+}
+
+function nuevoPartido() {
+
+  let idNuevo = generarId();
+
+  // redirige con nuevo ID
+  window.location.href = `${window.location.pathname}?id=${idNuevo}`;
+}
 if (!idPartido) {
   idPartido = Date.now().toString();
   window.location.search = "?id=" + idPartido;
@@ -82,15 +93,19 @@ let partido = {
   },
 
   terminado: false,
-  sorteoHecho: false
+  sorteoHecho: false,
+
+  maxPuntos : 0
 };
 document.getElementById("formDatos").addEventListener("submit", function(e) {
   e.preventDefault(); // 👈 evita recarga
 });
 
 function sorteoInicial() {
+  if (partido.sorteoHecho)return;
+  let cantPuntos = prompt("A cuántos puntos se juega el set?");
+  partido.maxPuntos = parseInt(cantPuntos);
 
-    if (partido.sorteoHecho)return;
   let ganador;
   let sacador;
 
@@ -106,7 +121,7 @@ function sorteoInicial() {
 
   // definir quién saca
   while(true){
-    sacador = prompt("Saca o recibe? (S o R)")
+    sacador = prompt("Saca o recibe? (S o R)").toUpperCase();
 
     if (sacador === "R" || sacador === "S"){
       break;
@@ -223,7 +238,7 @@ function sumarPunto(equipo) {
   let diferencia = Math.abs(puntos1 - puntos2);
 
   // 🏁 FIN DE SET (a 16 puntos)
-  if (partido.puntosSet[equipo][set] >= 16 && diferencia >= 2) {
+  if (partido.puntosSet[equipo][set] >= partido.maxPuntos && diferencia >= 2) {
 
     partido.setsGanados[equipo]++;
     alert(`🏆 Equipo ${equipo+1} ganó el set ${set+1}`);
@@ -261,13 +276,51 @@ function sumarPunto(equipo) {
     }
     
   }
+  console.log("maxPuntos:", partido.maxPuntos);
+  console.log("historial:", partido.historial);
 
   actualizarInfo();
   crearGrilla();
   guardarEnFirebase();
 
 }
+
+function restarPunto(equipo) {
+
+  if (partido.terminado) return;
+
+  let set = partido.setActual;
+
+  if (!partido.historial[equipo][set] || partido.historial[equipo][set].length === 0) {
+    return;
+  }
+
+  // borrar último punto
+  partido.historial[equipo][set].pop();
+
+  partido.puntos[equipo]--;
+  partido.puntosSet[equipo][set]--;
+
+  let totalSet = partido.puntosSet[0][set] + partido.puntosSet[1][set];
+
+  // revertir saque
+  if (totalSet % 4 === 3) {
+    partido.saque = 1 - partido.saque;
+  }
+
+  // reabrir set si hacía falta
+  if (partido.puntosSet[equipo][set] === partido.maxPuntos-1) {
+    partido.setsGanados[equipo]--;
+    partido.terminado = false;
+  }
+
+  actualizarInfo();
+  crearResumen();
+  crearGrilla();
+  guardarEnFirebase();
+}
 window.sumarPunto = sumarPunto;
+window.restarPunto = restarPunto;
 // INFO
 function actualizarInfo() {
     let nombre1 = document.getElementById("equipo1")?.value || "Equipo 1";
@@ -351,5 +404,5 @@ function descargarImagen() {
 }
 
 // INIT
-
+window.nuevoPartido = nuevoPartido;
 escucharFirebase();
