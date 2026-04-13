@@ -11,6 +11,12 @@
 <body>
   <div class="app">
     <h1>🎾 Planilla de Tenis</h1>
+    <div class="controladores">
+    <button onclick="activarModoArbitro()">🔐 Soy árbitro</button>
+    <button onclick="iniciarPartido()">🎾 Iniciar partido</button>
+    <button onclick="nuevoPartido()">➕ Nuevo Partido</button>
+    </div>
+
 
     <div id="exportar">
 
@@ -31,8 +37,8 @@
         <div id="resumen" class="card"></div>
         <div class="botones">
         <button class="uno" onclick="sumarPunto(0)">+ Punto Equipo 1</button>
-        <button class="dos" onclick="sumarPunto(1)">+ Punto Equipo 2</button>
         <button class="uno"onclick="restarPunto(0)">Deshacer punto</button>
+        <button class="dos" onclick="sumarPunto(1)">+ Punto Equipo 2</button>
         <button class="dos" onclick="restarPunto(1)">Deshacer punto</button>
         </div>
       </div>
@@ -42,7 +48,7 @@
     </div>
 
     <button class="descargar" onclick="descargarImagen()">📥 Descargar</button>
-    <button onclick="nuevoPartido()">➕ Nuevo Partido</button>
+
   </div>
 
   <!-- LIBRERÍA PRIMERO -->

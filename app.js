@@ -43,11 +43,8 @@ if (!idPartido) {
 async function guardarEnFirebase() {
   await setDoc(doc(db, "partidos", idPartido), partido);
 }
-const params = new URLSearchParams(window.location.search);
-const esAdmin = params.get("admin") === "1";
-if (!esAdmin) {
-  document.querySelector(".botones").style.display = "none";
-}
+
+
 function escucharFirebase() {
   onSnapshot(doc(db, "partidos", idPartido), (docSnap) => {
 
@@ -60,19 +57,15 @@ function escucharFirebase() {
       guardarEnFirebase();
     }
 
-    if (!partido.sorteoHecho && !sorteoMostrado) {
-      console.log("🎾 haciendo sorteo");
-      sorteoMostrado = true;
-      sorteoInicial();
-      guardarEnFirebase();
-      return;
-    }
+
+    actualizarBotones();
 
     actualizarInfo();
     crearGrilla();
     crearResumen();
   });
 }
+
 // ESTADO DEL PARTIDO
 let sorteoMostrado = false
 let partido = {
@@ -88,8 +81,8 @@ let partido = {
   saque: 0,
 
   historial: {
-    0: {},
-    1: {}
+    0: [],
+    1: []
   },
 
   terminado: false,
@@ -97,10 +90,41 @@ let partido = {
 
   maxPuntos : 0
 };
+
 document.getElementById("formDatos").addEventListener("submit", function(e) {
   e.preventDefault(); // 👈 evita recarga
 });
 
+let  esArbitro = false;
+function activarModoArbitro(){
+    let pass = prompt("🔐 Ingresá la contraseña de árbitro:");
+
+    if (pass === "tenis123") { //CAMBIAR CONTRASENA A LO QUE CORRESPONDA
+      esArbitro = true;
+      alert("✅ Modo árbitro activado");
+      actualizarBotones();
+
+      actualizarInfo();
+    } else {
+      alert("❌ Contraseña incorrecta");
+    }
+}
+window.activarModoArbitro = activarModoArbitro;
+function actualizarBotones() {
+  const botones = document.querySelector(".botones");
+  if (!botones) return;
+
+  botones.style.display = esArbitro ? "grid" : "none";
+}
+function iniciarPartido(){
+  if(!esArbitro){
+    alert("Solo es árbitro puede iniciar el partido")
+    return;
+  }
+
+  sorteoInicial();
+}
+window.iniciarPartido = iniciarPartido;
 function sorteoInicial() {
   if (partido.sorteoHecho)return;
   let cantPuntos = prompt("A cuántos puntos se juega el set?");
@@ -141,8 +165,8 @@ function sorteoInicial() {
       alert(`🎾 Saca primero el Equipo 1`);
     }
   }
-
   partido.sorteoHecho = true;
+  guardarEnFirebase();
 
 
 }
@@ -204,7 +228,10 @@ function cell(text, extra="") {
 
 // SUMAR PUNTO
 function sumarPunto(equipo) {
-    
+  if (!esArbitro) {
+    alert("⚠️ Solo el árbitro puede modificar el partido");
+    return;
+  }
 
   if (partido.terminado) return;
 
@@ -219,17 +246,17 @@ function sumarPunto(equipo) {
   partido.puntos[equipo]++;
   partido.puntosSet[equipo][set]++;
 
-  // 👇 TOTAL DEL SET (NO global)
+  // TOTAL DEL SET 
   let totalSet = partido.puntosSet[0][set] + partido.puntosSet[1][set];
   crearResumen();
 
-  // 🔁 CAMBIO DE SAQUE
+  // CAMBIO DE SAQUE
   if (totalSet % 4 === 0) {
     partido.saque = 1 - partido.saque;
     alert("🔁 Cambio de saque");
   }
 
-  // 🔄 CAMBIO DE LADO
+  // CAMBIO DE LADO
   if (totalSet % 8 === 0) {
     alert("🔄 Cambio de lado");
   }
@@ -286,6 +313,10 @@ function sumarPunto(equipo) {
 }
 
 function restarPunto(equipo) {
+  if (!esArbitro) {
+  alert("⚠️ Solo el árbitro puede modificar el partido");
+  return;
+  }
 
   if (partido.terminado) return;
 
@@ -321,6 +352,7 @@ function restarPunto(equipo) {
 }
 window.sumarPunto = sumarPunto;
 window.restarPunto = restarPunto;
+
 // INFO
 function actualizarInfo() {
     let nombre1 = document.getElementById("equipo1")?.value || "Equipo 1";
@@ -328,12 +360,14 @@ function actualizarInfo() {
     let torneo = document.getElementById("torneo")?.value || "-";
     let categoria = document.getElementById("categoria")?.value || "-";
     let ganador = "";
+    let cantPuntos = partido.maxPuntos;
 
     if (partido.terminado) {
     ganador = partido.setsGanados[0] === 2 ? nombre1 : nombre2;
     }
     document.getElementById("info").innerHTML = `
     <p><strong>${nombre1}</strong> vs <strong>${nombre2}</strong></p>
+    <p>Se juega a ${cantPuntos} puntos</p>
     <p>Torneo: ${torneo} | Categoría: ${categoria}</p>
     <p>Set actual: ${partido.setActual+1}</p>
     <p>Saca: ${partido.saque === 0 ? nombre1 : nombre2}</p>
@@ -402,6 +436,7 @@ function descargarImagen() {
   });
 
 }
+window.descargarImagen = descargarImagen;
 
 // INIT
 window.nuevoPartido = nuevoPartido;

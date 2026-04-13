@@ -61,6 +61,10 @@ button {
   transition: 0.2s;
 }
 
+.controladores{
+  margin: 20px;
+
+}
 button:hover {
   transform: scale(1.05);
 }
