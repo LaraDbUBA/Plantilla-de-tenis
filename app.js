@@ -118,7 +118,7 @@ function actualizarBotones() {
 }
 function iniciarPartido(){
   if(!esArbitro){
-    alert("Solo es árbitro puede iniciar el partido")
+    alert("Solo el árbitro puede iniciar el partido")
     return;
   }
 
@@ -228,6 +228,10 @@ function cell(text, extra="") {
 
 // SUMAR PUNTO
 function sumarPunto(equipo) {
+  if (!partido.sorteoHecho){
+    alert("No se ha inicializado el partido, toca el botón de INICIAR PARTIDO")
+    return;
+  }
   if (!esArbitro) {
     alert("⚠️ Solo el árbitro puede modificar el partido");
     return;
@@ -313,10 +317,15 @@ function sumarPunto(equipo) {
 }
 
 function restarPunto(equipo) {
+  if (!partido.sorteoHecho){
+    alert("No se ha inicializado el partido, toca el botón de INICIAR PARTIDO")
+    return;
+  }
   if (!esArbitro) {
   alert("⚠️ Solo el árbitro puede modificar el partido");
   return;
   }
+
 
   if (partido.terminado) return;
 
